@@ -1,4 +1,4 @@
-from config_db import conexao
+from config_db import conexao, api_token
 from config_access import *
 
 

@@ -3,20 +3,20 @@ class Prevenda_pedido():
         self.prevenda_pedido_default = {
         "id": "",
         "status": "open",
-        "deliveryFee": 0.0,
+       # "deliveryFee": 0.0,
         "paymentMethod": "money",
         "notes": "",
-        "courierFee": 0.0,
+        #"courierFee": 0.0,
         "orderTotal": 0.0,
         "orderDetails": "",
         "deliveryPoint": {
             "address": "",
             "street": "",
             "houseNumber": "",
-            "coordinates": {
-                "lat": 00.00000000000000,
-                "lng": 00.00000000000000
-                },
+            # "coordinates": {
+            #     "lat": 00.00000000000000,
+            #     "lng": 00.00000000000000
+            #     },
             "city": "",
             "region": "",
             "country": "",

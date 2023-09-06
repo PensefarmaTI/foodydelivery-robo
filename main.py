@@ -1,5 +1,7 @@
 from model import Prevenda_pedido
 from prevenda_methods import *
+import requests
+import json
 
 prevenda_pedido_list = []
 
@@ -13,7 +15,7 @@ def filtra_dados_prevenda():
         prevenda_pedido['notes'] = str(prevenda[1]) if prevenda[1] is not None else ""
         prevenda_pedido['paymentMethod'] = get_payment_method(prevenda_pedido['id'])['method']
         prevenda_pedido['orderTotal'] = float(prevenda[2])
-        prevenda_pedido['date'] = orderDate
+        prevenda_pedido['date'] = orderDate + '-03:00'
         prevenda_pedido['customer'] = get_client_info(prevenda_pedido['id'])
         prevenda_pedido['deliveryPoint'] = get_address_info(prevenda_pedido['id'])
 
@@ -34,13 +36,24 @@ def visualizacao_objeto(prevenda_list):
         print(f"endereço: {prevenda_list[i]['deliveryPoint']['address']}")
         print(f"data: {prevenda_list[i]['date']}")
 
-def envia_dados_foodydelivery():
-    # Url: https://app.foodydelivery.com/rest/1.2/orders
-    # Method: POST
-    pass
+def envia_dados_foodydelivery(order_to_send):
+    url = 'https://app.foodydelivery.com/rest/1.2/orders'
+    dados = order_to_send
+    cabecalhos = {"Authorization": api_token, "Content-Type":"application/json"}
+    
+    response = requests.post(url, data=dados, headers=cabecalhos, timeout=10)
+
+    # Verificando a resposta
+    if response.status_code == 200:
+        print('Solicitação bem-sucedida!')
+        print(response.text)
+    else:
+        print(f'Falha na solicitação com código de status {response.status_code}')
 
 filtra_dados_prevenda()
-visualizacao_objeto(prevenda_pedido_list)
-# print(prevenda_pedido_list)
+# visualizacao_objeto(prevenda_pedido_list)
+# print(prevenda_pedido_list[0])
+
+# envia_dados_foodydelivery(json.dumps(prevenda_pedido_list[3]))
 
 conexao.close()
