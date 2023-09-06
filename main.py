@@ -32,7 +32,7 @@ def filtra_dados_prevenda():
 
         prevenda_pedido_list.append(prevenda_pedido)
     
-    print(prevenda_pedido_list)
+    # print(prevenda_pedido_list)
     # prevenda_pedido['id'] = '123'
     # print(prevenda_pedido)
 
