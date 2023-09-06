@@ -1,4 +1,4 @@
 from datetime import datetime
 
-loja = 36
+loja = 1
 data = datetime.now().strftime("%d/%m/%Y")

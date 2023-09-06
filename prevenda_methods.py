@@ -51,22 +51,81 @@ def get_details(prevenda_numero):
 
 
 def get_payment_method(prevenda_numero):
-    payment_list = get_prevenda(columns='dinheiro, troco, convenio, cartao, prevenda', where_filter=f'and prevenda = {prevenda_numero}')
+    payment = get_prevenda(columns='dinheiro, troco, convenio, cartao, prevenda', where_filter=f'and prevenda = {prevenda_numero}')[0]
 
-    for payment in payment_list:
-        for payment_index in range(0, len(payment)):
-            payment_method = {}
-            if payment[payment_index] != 0:
-                if payment_index == 0:
-                    payment_method['method'] = 'money'
-                    payment_method['value'] = str(payment[payment_index])
-                    payment_method['exchange'] = str(payment[1])
-                elif payment_index == 2:
-                    payment_method['method'] = 'online'
-                    payment_method['value'] = str(payment[payment_index])
-                elif payment_index == 3:
-                    payment_method['method'] = 'card'
-                    payment_method['value'] = str(payment[payment_index])
-                else:
-                    continue
-                return payment_method
+    for payment_index in range(0, len(payment)):
+        payment_method = {}
+        if payment[payment_index] != 0:
+            if payment_index == 0:
+                payment_method['method'] = 'money'
+                payment_method['value'] = str(payment[payment_index])
+                payment_method['exchange'] = str(payment[1])
+            elif payment_index == 2:
+                payment_method['method'] = 'online'
+                payment_method['value'] = str(payment[payment_index])
+            elif payment_index == 3:
+                payment_method['method'] = 'card'
+                payment_method['value'] = str(payment[payment_index])
+            else:
+                continue
+            return payment_method
+
+
+
+def get_client_info(prevenda_numero):
+    client_info = get_prevenda(columns='nome, telefone',where_filter=f'and prevenda = {prevenda_numero}')[0]
+    telefone = client_info[0]
+    nome = client_info[1]
+    client_info = {
+        'customerPhone': nome,
+        'customerName': telefone,
+        'customerEmail': ''
+    }
+    return client_info
+
+
+def get_address_info(prevenda_numero):
+    address_info = get_prevenda(columns='cep, tipo_endereco, endereco, numero, complemento, bairro, cidade, estado', where_filter=f'and prevenda = {prevenda_numero}')[0]
+    
+    cep = address_info[0]
+    tipo_endereco = address_info[1]
+    endereco = address_info[2]
+    numero = address_info[3]
+    complemento = address_info[4]
+    bairro = address_info[5]
+    cidade = address_info[6]
+    estado = address_info[7]
+    pais = "brasil"
+
+    #avenida argentina 683, parque paraiso, itapecerica da serra - sp
+
+    address =  f'{tipo_endereco} {endereco}'
+    find_numero = endereco.find(str(numero))
+    if find_numero == -1:
+        address += f' - Número: {str(numero)}, '
+    else:
+        address += ', '
+    address += f'{bairro}, {cidade} - {estado}'
+    if complemento != "":
+        address += f' complem.: {complemento}'
+    address += f' cep.: {cep}'
+    address_info = {
+        "address": address,
+        "street": endereco,
+        "houseNumber": numero,
+        "coordinates": {},
+        "city": cidade,
+        "region": bairro,
+        "country": pais,
+        "complement": complemento
+    }
+    return address_info
+
+    
+
+if __name__ == '__main__':
+    loja = 1
+    data = '06/09/2023'
+    # get_address_info(199249)
+    # get_client_info(199249)
+    # get_payment_method(199249)

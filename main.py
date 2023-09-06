@@ -14,6 +14,8 @@ def filtra_dados_prevenda():
         prevenda_pedido['paymentMethod'] = get_payment_method(prevenda_pedido['id'])['method']
         prevenda_pedido['orderTotal'] = str(prevenda[2])
         prevenda_pedido['date'] = orderDate
+        prevenda_pedido['customer'] = get_client_info(prevenda_pedido['id'])
+        prevenda_pedido['deliveryPoint'] = get_address_info(prevenda_pedido['id'])
 
 
         prevenda_pedido_list.append(prevenda_pedido)
@@ -29,8 +31,8 @@ def visualizacao_objeto(prevenda_list):
         print(f"prevenda_obs: {prevenda_list[i]['notes']}")
         print(f"prevenda_pagamento: {prevenda_list[i]['paymentMethod']}")
         print(f"total: {prevenda_list[i]['orderTotal']}")
+        print(f"endereço: {prevenda_list[i]['deliveryPoint']['address']}")
         print(f"data: {prevenda_list[i]['date']}")
-
 
 def envia_dados_foodydelivery():
     # Url: https://app.foodydelivery.com/rest/1.2/orders
