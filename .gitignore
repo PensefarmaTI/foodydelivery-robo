@@ -1,3 +1,5 @@
 config_db.py
+config_gmaps.py
+gmaps.py
 consultas
 consultas/

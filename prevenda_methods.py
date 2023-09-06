@@ -40,7 +40,8 @@ def get_details(prevenda_numero):
         controlado = str(item[3])
         total_geral += total
         
-        product_line += f'{quantidade.center(10)} {descricao.ljust(100)} | R$ {str(total).center(10)}'
+        #product_line += f'{quantidade.center(10)} {descricao.ljust(100)} | R$ {str(total).center(10)}'
+        product_line += f'{quantidade} {descricao} | R$ {str(total)}'
         if controlado == 'S':
             product_line += '  *RETER RECEITA'
         product_line += '\n'
@@ -86,16 +87,16 @@ def get_client_info(prevenda_numero):
 
 def get_address_info(prevenda_numero):
     address_info = get_prevenda(columns='cep, tipo_endereco, endereco, numero, complemento, bairro, cidade, estado', where_filter=f'and prevenda = {prevenda_numero}')[0]
-    
     cep = address_info[0]
     tipo_endereco = address_info[1]
     endereco = address_info[2]
-    numero = address_info[3]
+    numero = str(address_info[3])
     complemento = address_info[4]
     bairro = address_info[5]
     cidade = address_info[6]
     estado = address_info[7]
     pais = "brasil"
+    coordinates = {"lat":"","lng":""}
 
     #avenida argentina 683, parque paraiso, itapecerica da serra - sp
 
@@ -113,7 +114,7 @@ def get_address_info(prevenda_numero):
         "address": address,
         "street": endereco,
         "houseNumber": numero,
-        "coordinates": {},
+        "coordinates": coordinates,
         "city": cidade,
         "region": bairro,
         "country": pais,
