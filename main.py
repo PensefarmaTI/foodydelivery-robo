@@ -1,13 +1,14 @@
 from model import Prevenda_pedido
 from prevenda_methods import *
 from os import system
+from menu import menu
 import requests
 import time
 import json
 
+inicializado = False
 prevenda_pedido_list = []
 timezone = '-03:00'
-inicializado = False
 filter_timer = 10
 
 def filtra_dados_prevenda(loja):
@@ -105,12 +106,18 @@ def reset_enviado_field(loja):
 
 
 
-def inicia_robo():
+def inicia_robo(lojas = '*'):
+    global inicializado
     inicializado = True
     while inicializado:
         start_time = time.time()
-        # lojas_list = get_lojas_list()
-        lojas_list = [19, 44]
+
+        if lojas == '*':
+            lojas_list = get_lojas_list()
+        else:
+            # tem que ser uma string de lista de lojas de parametro
+            lojas_list = lojas.split(',')
+
         for loja in lojas_list:
             filtra_dados_prevenda(loja)
             if not prevenda_pedido_list:
@@ -129,6 +136,7 @@ def inicia_robo():
 
 
 
+
 # filtra_dados_prevenda(1)
 # update_enviar_field_to_S(1, prevenda_pedido_list[0]['id'])
 # filtra_dados_prevenda(43)
@@ -138,6 +146,29 @@ def inicia_robo():
 # reset_enviado_field(19)
 # print(get_loja_token(25))
 
-# inicia_robo()
+# inicia_robo('44,1')
+
+
+
+sair = False
+
+while not sair:
+    menu()
+    opcao = int(input('Escolha uma das opções acima: '))
+    if opcao == 1:
+        loja = str(input('Selecione a loja que deseja iniciar o robo (* para todas): '))
+        inicia_robo(loja)   
+    elif opcao == 2:
+        loja = int(input('Selecione a loja que deseja visualizar os prevendas ainda não enviados: '))
+        filtra_dados_prevenda(loja)
+        visualizacao_objeto(prevenda_pedido_list, loja)
+        limpa_lista_prevendas()
+    elif opcao == 4:
+        loja = int(input('Selecione a loja que deseja resetar os prevendas para NULL: '))
+        reset_enviado_field(loja)
+    elif opcao == 0:
+        sair = True
+
+
 
 conexao.close()
