@@ -86,10 +86,11 @@ def get_lojas_list():
 def update(query):
     try:
         cursor = conexao.execute(query)
-        cursor.commit()
+        conexao.commit()
         print("UPDATE executado com sucesso.")
     except Exception as e:
         print(f"Erro ao executar o UPDATE: {e}")
+        conexao.rollback()
     finally:
         cursor.close()
 
