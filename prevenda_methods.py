@@ -1,12 +1,10 @@
 from config_db import conexao
 from datetime import datetime
-# from main import loja,data
 
 data = datetime.now().strftime("%d/%m/%Y")
 
-
 def get_prevenda(loja, columns='*', where_filter=''):
-    query = f"select {columns} from pdv_prevendas where loja = {loja} and data = '{data}' and ORIGEM = 'T' and versao <> 'IFOOD' {where_filter} -- and ENVIAR_FOODY = 'N'"
+    query = f"select {columns} from pdv_prevendas where loja = {loja} and data = '{data}' and ORIGEM = 'T' and versao <> 'IFOOD' {where_filter} and ENVIADO_FOODY = 'N'"
     
     prevenda_list = get_list_of_db(query)
     for item in prevenda_list:
@@ -101,8 +99,6 @@ def get_address_info(loja, prevenda_numero):
     pais = "brasil"
     coordinates = {"lat":"","lng":""}
 
-    #avenida argentina 683, parque paraiso, itapecerica da serra - sp
-
     address =  f'{tipo_endereco} {endereco}'
     find_numero = endereco.find(str(numero))
     if find_numero == -1:
@@ -128,8 +124,4 @@ def get_address_info(loja, prevenda_numero):
     
 
 if __name__ == '__main__':
-    loja = 1
-    data = '06/09/2023'
-    # get_address_info(199249)
-    # get_client_info(199249)
-    # get_payment_method(199249)
+    pass
