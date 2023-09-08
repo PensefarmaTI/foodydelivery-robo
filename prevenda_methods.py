@@ -1,8 +1,11 @@
-from config_db import conexao, api_token
-from config_access import *
+from config_db import conexao
+from datetime import datetime
+# from main import loja,data
+
+data = datetime.now().strftime("%d/%m/%Y")
 
 
-def get_prevenda(columns='*', where_filter=''):
+def get_prevenda(loja, columns='*', where_filter=''):
     query = f"select {columns} from pdv_prevendas where loja = {loja} and data = '{data}' and ORIGEM = 'T' and versao <> 'IFOOD' {where_filter} -- and ENVIAR_FOODY = 'N'"
     
     prevenda_list = get_list_of_db(query)
@@ -23,7 +26,7 @@ def get_list_of_db(query):
 
 
 
-def get_details(prevenda_numero):
+def get_details(loja, prevenda_numero):
     query  = f"select A.QUANTIDADE, B.DESCRICAO, A.TOTAL_ITEM, B.CONTROLADO "
     query += f"from	pdv_prevendas_itens A JOIN PRODUTOS B ON A.PRODUTO = B.PRODUTO "
     query += f"where prevenda = {prevenda_numero} and loja = {loja}"
@@ -51,8 +54,8 @@ def get_details(prevenda_numero):
 
 
 
-def get_payment_method(prevenda_numero):
-    payment = get_prevenda(columns='dinheiro, troco, convenio, cartao, prevenda', where_filter=f'and prevenda = {prevenda_numero}')[0]
+def get_payment_method(loja, prevenda_numero):
+    payment = get_prevenda(loja, columns='dinheiro, troco, convenio, cartao, prevenda', where_filter=f'and prevenda = {prevenda_numero}')[0]
 
     for payment_index in range(0, len(payment)):
         payment_method = {}
@@ -73,8 +76,8 @@ def get_payment_method(prevenda_numero):
 
 
 
-def get_client_info(prevenda_numero):
-    client_info = get_prevenda(columns='nome, telefone',where_filter=f'and prevenda = {prevenda_numero}')[0]
+def get_client_info(loja, prevenda_numero):
+    client_info = get_prevenda(loja, columns='nome, telefone',where_filter=f'and prevenda = {prevenda_numero}')[0]
     telefone = client_info[0]
     nome = client_info[1]
     client_info = {
@@ -85,8 +88,8 @@ def get_client_info(prevenda_numero):
     return client_info
 
 
-def get_address_info(prevenda_numero):
-    address_info = get_prevenda(columns='cep, tipo_endereco, endereco, numero, complemento, bairro, cidade, estado', where_filter=f'and prevenda = {prevenda_numero}')[0]
+def get_address_info(loja, prevenda_numero):
+    address_info = get_prevenda(loja, columns='cep, tipo_endereco, endereco, numero, complemento, bairro, cidade, estado', where_filter=f'and prevenda = {prevenda_numero}')[0]
     cep = address_info[0]
     tipo_endereco = address_info[1]
     endereco = address_info[2]
