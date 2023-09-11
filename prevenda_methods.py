@@ -121,7 +121,62 @@ def get_address_info(loja, prevenda_numero):
     }
     return address_info
 
+
+def get_loja_token(loja):
+    query = f'select TOKEN from PARAMETRIZACOES_LOJAS_FOODY where EMPRESA = {loja}'
+    cursor = conexao.cursor()    
+    cursor.execute(query)
+    for token in cursor:
+        return token[0]
+
+def get_lojas_list():
+    query = f'select empresa from PARAMETRIZACOES_LOJAS_FOODY'
+    cursor = conexao.cursor()
+    cursor.execute(query)
+
+    lojas_list = []
+    for empresa in cursor:
+        lojas_list.append(empresa[0])
+
+    lojas_list.sort()
+    return lojas_list
     
+
+def limpa_lista_prevendas():
+    global prevenda_pedido_list
+    prevenda_pedido_list = []
+
+def visualizacao_objeto(prevenda_list, loja):
+    print(f'\n\nLOJA: {loja}\n')
+    for i in range(0, len(prevenda_list)):
+        print(f"prevenda {i+1}")
+        print(f"id: {prevenda_list[i]['id']}")
+        print(f"prevenda_itens: \n{prevenda_list[i]['orderDetails']}")
+        print(f"prevenda_obs: {prevenda_list[i]['notes']}")
+        print(f"prevenda_pagamento: {prevenda_list[i]['paymentMethod']}")
+        print(f"total: {prevenda_list[i]['orderTotal']}")
+        print(f"endereço: {prevenda_list[i]['deliveryPoint']['address']}")
+        print(f"data: {prevenda_list[i]['date']}\n")
+
+
+def update(query):
+    try:
+        cursor = conexao.execute(query)
+        conexao.commit()
+        print("UPDATE executado com sucesso.")
+    except Exception as e:
+        print(f"Erro ao executar o UPDATE: {e}")
+        conexao.rollback()
+    finally:
+        cursor.close()
+
+def update_enviar_field_to_S(loja, prevenda):
+    query = f"update PDV_PREVENDAS set ENVIADO_FOODY = 'S' where loja = {loja} and data = '{data}' and ORIGEM = 'T' and versao <> 'IFOOD' and PREVENDA={prevenda}"
+    update(query)
+
+def reset_enviado_field(loja):
+    query = f"update PDV_PREVENDAS set ENVIADO_FOODY = NULL where loja = {loja} and data = '{data}' and ORIGEM = 'T' and versao <> 'IFOOD'"
+    update(query)
 
 if __name__ == '__main__':
     pass
