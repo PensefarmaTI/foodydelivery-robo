@@ -173,6 +173,10 @@ def reset_enviado_field(loja):
     query = f"update PDV_PREVENDAS set ENVIADO_FOODY = NULL where loja = {loja} and data = '{data}' and ORIGEM = 'T' and versao <> 'IFOOD'"
     update(query)
 
+def limpa_lista(lista):
+    for item in lista:
+        lista.remove(item)
+    return lista
 
 if __name__ == '__main__':
     pass
