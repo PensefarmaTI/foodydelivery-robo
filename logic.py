@@ -6,11 +6,10 @@ import time
 import json
 
 inicializado = False
-prevenda_pedido_list = []
 timezone = '-03:00'
 filter_timer = 10
 
-def filtra_dados_prevenda(loja):
+def filtra_dados_prevenda(loja, lista):
     prevenda_list = get_prevenda(loja, columns='prevenda, observacoes, total_liquido')
     orderDate = datetime.now().strftime("%Y-%m-%dT%H:%M:%S%z")
     try:
@@ -25,7 +24,7 @@ def filtra_dados_prevenda(loja):
             prevenda_pedido['customer'] = get_client_info(loja, prevenda_pedido['id'])
             prevenda_pedido['deliveryPoint'] = get_address_info(loja, prevenda_pedido['id'])
             
-            prevenda_pedido_list.append(prevenda_pedido)
+            lista.append(prevenda_pedido)
     except Exception as exp:
         print(exp)        
 
@@ -44,12 +43,10 @@ def envia_dados_foodydelivery(order_to_send, loja, prevenda):
         print(f'Falha na solicitação com código de status {response.status_code}')
 
 
-def inicia_robo(lojas = '*'):
-    global inicializado
+def inicia_robo(lista, lojas = '*'):
     inicializado = True
     while inicializado:
         start_time = time.time()
-
         if lojas == '*':
             lojas_list = get_lojas_list()
         else:
@@ -57,17 +54,18 @@ def inicia_robo(lojas = '*'):
             lojas_list = lojas.split(',')
 
         for loja in lojas_list:
-            filtra_dados_prevenda(loja)
-            if not prevenda_pedido_list:
+            filtra_dados_prevenda(loja, lista)
+            if not lista:
                 continue
-            visualizacao_objeto(prevenda_pedido_list, loja)
+            visualizacao_objeto(lista, loja)
             time.sleep(1)
-            for prevenda in prevenda_pedido_list:
-                envia_dados_foodydelivery(json.dumps(prevenda), loja, prevenda_pedido_list[prevenda_pedido_list.index(prevenda)]['id'] )
-            limpa_lista_prevendas()
+            for prevenda in lista:
+                envia_dados_foodydelivery(json.dumps(prevenda), loja, lista[lista.index(prevenda)]['id'] )
     
         end_time = time.time()
         elapsed_time = end_time - start_time
         # system('cls')
         print(f"\n\nTempo decorrido: {elapsed_time} segundos")
         time.sleep(filter_timer)
+
+

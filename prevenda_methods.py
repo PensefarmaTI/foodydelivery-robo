@@ -4,7 +4,7 @@ from datetime import datetime
 data = datetime.now().strftime("%d/%m/%Y")
 
 def get_prevenda(loja, columns='*', where_filter=''):
-    query = f"select {columns} from pdv_prevendas where loja = {loja} and data = '{data}' and ORIGEM = 'T' and versao <> 'IFOOD' {where_filter} and ENVIADO_FOODY = 'N'"
+    query = f"select {columns} from pdv_prevendas where loja = {loja} and data = '{data}' and ORIGEM = 'T' and canal_venda <> 8 {where_filter} and ENVIADO_FOODY = 'N'"
     
     prevenda_list = get_list_of_db(query)
     for item in prevenda_list:
@@ -140,11 +140,6 @@ def get_lojas_list():
 
     lojas_list.sort()
     return lojas_list
-    
-
-def limpa_lista_prevendas():
-    global prevenda_pedido_list
-    prevenda_pedido_list = []
 
 def visualizacao_objeto(prevenda_list, loja):
     print(f'\n\nLOJA: {loja}\n')
@@ -177,6 +172,7 @@ def update_enviar_field_to_S(loja, prevenda):
 def reset_enviado_field(loja):
     query = f"update PDV_PREVENDAS set ENVIADO_FOODY = NULL where loja = {loja} and data = '{data}' and ORIGEM = 'T' and versao <> 'IFOOD'"
     update(query)
+
 
 if __name__ == '__main__':
     pass

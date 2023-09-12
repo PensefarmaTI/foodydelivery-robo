@@ -3,7 +3,7 @@ class Prevenda_pedido():
         self.prevenda_pedido_default = {
         "id": "",
         "status": "open",
-       # "deliveryFee": 0.0,
+        # "deliveryFee": 0.0,
         "paymentMethod": "money",
         "notes": "",
         #"courierFee": 0.0,
