@@ -8,7 +8,7 @@ import json
 inicializado = False
 lista_prevendas = []
 timezone = '-03:00'
-filter_timer = 10
+filter_timer = 2
 
 def filtra_dados_prevenda(loja):
     prevenda_list = get_prevenda(loja, columns='prevenda, observacoes, total_liquido')
@@ -63,7 +63,7 @@ def inicia_robo(lojas = '*'):
             visualizacao_objeto(prevenda, loja)
             envia_dados_foodydelivery(json.dumps(prevenda), loja, prevenda)
             lista_prevendas.remove(prevenda)
-            time.sleep(10)
+            time.sleep(2)
     
         end_time = time.time()
         elapsed_time = end_time - start_time
