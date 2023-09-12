@@ -10,7 +10,6 @@ while not sair:
     elif opcao == 2:
         loja = int(input('Selecione a loja que deseja visualizar os prevendas ainda não enviados: '))
         filtra_dados_prevenda(loja)
-        visualizacao_objeto(loja)
     elif opcao == 4:
         loja = int(input('Selecione a loja que deseja resetar os prevendas para NULL: '))
         reset_enviado_field(loja)

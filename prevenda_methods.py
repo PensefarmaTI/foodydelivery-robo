@@ -141,17 +141,15 @@ def get_lojas_list():
     lojas_list.sort()
     return lojas_list
 
-def visualizacao_objeto(prevenda_list, loja):
+def visualizacao_objeto(prevenda, loja):
     print(f'\n\nLOJA: {loja}\n')
-    for i in range(0, len(prevenda_list)):
-        print(f"prevenda {i+1}")
-        print(f"id: {prevenda_list[i]['id']}")
-        print(f"prevenda_itens: \n{prevenda_list[i]['orderDetails']}")
-        print(f"prevenda_obs: {prevenda_list[i]['notes']}")
-        print(f"prevenda_pagamento: {prevenda_list[i]['paymentMethod']}")
-        print(f"total: {prevenda_list[i]['orderTotal']}")
-        print(f"endereço: {prevenda_list[i]['deliveryPoint']['address']}")
-        print(f"data: {prevenda_list[i]['date']}\n")
+    print(f"id: {prevenda['id']}")
+    print(f"prevenda_itens: \n{prevenda['orderDetails']}")
+    print(f"prevenda_obs: {prevenda['notes']}")
+    print(f"prevenda_pagamento: {prevenda['paymentMethod']}")
+    print(f"total: {prevenda['orderTotal']}")
+    print(f"endereço: {prevenda['deliveryPoint']['address']}")
+    print(f"data: {prevenda['date']}\n")
 
 
 def update(query):

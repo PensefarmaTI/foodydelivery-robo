@@ -30,17 +30,17 @@ def filtra_dados_prevenda(loja):
         print(exp)        
 
 def envia_dados_foodydelivery(order_to_send, loja, prevenda):
+    prevenda_id = prevenda['id']
     url = 'https://app.foodydelivery.com/rest/1.2/orders'
     dados = order_to_send
     cabecalhos = {"Authorization": get_loja_token(loja), "Content-Type":"application/json"}
     
-    response = requests.post(url, data=dados, headers=cabecalhos, timeout=10)
+    response = requests.post(url, data=dados, headers=cabecalhos)
 
     # Verificando a resposta
     if response.status_code == 200:
         print('Solicitação bem-sucedida!')
-        update_enviar_field_to_S(loja, prevenda)
-        limpa_lista(lista_prevendas)
+        update_enviar_field_to_S(loja, prevenda_id)
     else:
         print(f'Falha na solicitação com código de status {response.status_code}')
 
@@ -57,12 +57,13 @@ def inicia_robo(lojas = '*'):
 
         for loja in lojas_list:
             filtra_dados_prevenda(loja)
-            if not lojas_list:
-                continue
-            visualizacao_objeto(lista_prevendas, loja)
-            time.sleep(1)
-            for prevenda in lista_prevendas:
-                envia_dados_foodydelivery(json.dumps(prevenda), loja, lista_prevendas[lista_prevendas.index(prevenda)]['id'] )
+
+        for prevenda in lista_prevendas.copy():
+            print(prevenda['id'])
+            visualizacao_objeto(prevenda, loja)
+            envia_dados_foodydelivery(json.dumps(prevenda), loja, prevenda)
+            lista_prevendas.remove(prevenda)
+            time.sleep(10)
     
         end_time = time.time()
         elapsed_time = end_time - start_time
