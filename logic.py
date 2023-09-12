@@ -18,7 +18,7 @@ def filtra_dados_prevenda(loja):
             prevenda_pedido = Prevenda_pedido().prevenda_pedido_default
             prevenda_pedido['id'] = str(prevenda[0])
             prevenda_pedido['orderDetails'] = get_details(loja, prevenda_pedido['id'])
-            prevenda_pedido['notes'] = str(prevenda[1]) if prevenda[1] is not None else ""
+            prevenda_pedido['notes'] = f'{prevenda[1]} | LOJA {loja}' if prevenda[1] is not None else f'LOJA {loja}'
             prevenda_pedido['paymentMethod'] = get_payment_method(loja, prevenda_pedido['id'])['method']
             prevenda_pedido['orderTotal'] = float(prevenda[2])
             prevenda_pedido['date'] = orderDate + timezone
