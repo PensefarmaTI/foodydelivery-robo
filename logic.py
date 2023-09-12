@@ -58,12 +58,14 @@ def inicia_robo(lojas = '*'):
         for loja in lojas_list:
             filtra_dados_prevenda(loja)
 
-        for prevenda in lista_prevendas.copy():
-            print(prevenda['id'])
-            visualizacao_objeto(prevenda, loja)
-            envia_dados_foodydelivery(json.dumps(prevenda), loja, prevenda)
-            lista_prevendas.remove(prevenda)
-            time.sleep(2)
+            for prevenda in lista_prevendas.copy():
+                print(prevenda['id'])
+                visualizacao_objeto(prevenda, loja)
+                envia_dados_foodydelivery(json.dumps(prevenda), loja, prevenda)
+                lista_prevendas.remove(prevenda)
+                time.sleep(6)
+            
+            limpa_lista(lista_prevendas)
     
         end_time = time.time()
         elapsed_time = end_time - start_time
