@@ -40,6 +40,7 @@ def envia_dados_foodydelivery(order_to_send, loja, prevenda):
     if response.status_code == 200:
         print('Solicitação bem-sucedida!')
         update_enviar_field_to_S(loja, prevenda)
+        limpa_lista(lista_prevendas)
     else:
         print(f'Falha na solicitação com código de status {response.status_code}')
 
@@ -62,8 +63,6 @@ def inicia_robo(lojas = '*'):
             time.sleep(1)
             for prevenda in lista_prevendas:
                 envia_dados_foodydelivery(json.dumps(prevenda), loja, lista_prevendas[lista_prevendas.index(prevenda)]['id'] )
-                update_enviar_field_to_S(loja, prevenda['id'])
-                limpa_lista(lista_prevendas)
     
         end_time = time.time()
         elapsed_time = end_time - start_time
