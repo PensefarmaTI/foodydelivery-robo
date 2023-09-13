@@ -87,31 +87,28 @@ def get_client_info(loja, prevenda_numero):
 
 
 def get_address_info(loja, prevenda_numero):
-    address_info = get_prevenda(loja, columns='cep, tipo_endereco, endereco, numero, complemento, bairro, cidade, estado', where_filter=f'and prevenda = {prevenda_numero}')[0]
-    cep = address_info[0]
-    tipo_endereco = address_info[1]
-    endereco = address_info[2]
-    numero = str(address_info[3])
-    complemento = address_info[4]
-    bairro = address_info[5]
-    cidade = address_info[6]
-    estado = address_info[7]
+    address_info_prevenda = get_prevenda(loja, columns='cep, tipo_endereco, endereco, numero, complemento, bairro, cidade, estado', where_filter=f'and prevenda = {prevenda_numero}')[0]
+    
+    cep = address_info_prevenda[0]
+    tipo_endereco = address_info_prevenda[1]
+    endereco = address_info_prevenda[2]
+    numero = str(address_info_prevenda[3])
+    complemento = address_info_prevenda[4]
+    bairro = address_info_prevenda[5]
+    cidade = address_info_prevenda[6]
+    estado = address_info_prevenda[7]
     pais = "brasil"
     coordinates = {"lat":"","lng":""}
 
-    address =  f'{tipo_endereco} {endereco}'
-    find_numero = endereco.find(str(numero))
-    if find_numero == -1:
-        address += f' - Número: {str(numero)}, '
-    else:
-        address += ', '
-    address += f'{bairro}, {cidade} - {estado}'
-    if complemento != "":
-        address += f' complem.: {complemento}'
-    address += f' cep.: {cep}'
+    endereco = endereco.replace(',','')
+
+    address =  f'{tipo_endereco} {endereco} - {bairro} - {cep} , {numero}, {bairro}'
+
+    rua = f'{tipo_endereco} {endereco}, {bairro} CEP.:{cep}'
+
     address_info = {
         "address": address,
-        "street": endereco,
+        "street": rua,
         "houseNumber": numero,
         "coordinates": coordinates,
         "city": cidade,
@@ -119,6 +116,8 @@ def get_address_info(loja, prevenda_numero):
         "country": pais,
         "complement": complemento
     }
+
+
     return address_info
 
 
@@ -148,7 +147,7 @@ def visualizacao_objeto(prevenda, loja):
     print(f"prevenda_obs: {prevenda['notes']}")
     print(f"prevenda_pagamento: {prevenda['paymentMethod']}")
     print(f"total: {prevenda['orderTotal']}")
-    print(f"endereço: {prevenda['deliveryPoint']['address']}")
+    print(f"endereço: {prevenda['deliveryPoint']}")
     print(f"data: {prevenda['date']}\n")
 
 
@@ -177,4 +176,4 @@ def limpa_lista(lista):
     return lista
 
 if __name__ == '__main__':
-    pass
+    print(get_address_info(36, prevenda_numero=500112447))

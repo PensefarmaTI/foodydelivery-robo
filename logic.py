@@ -17,13 +17,15 @@ def filtra_dados_prevenda(loja):
         for prevenda in prevenda_list:
             prevenda_pedido = Prevenda_pedido().prevenda_pedido_default
             prevenda_pedido['id'] = str(prevenda[0])
-            prevenda_pedido['orderDetails'] = get_details(loja, prevenda_pedido['id'])
-            prevenda_pedido['notes'] = f'{prevenda[1]} | LOJA {loja}' if prevenda[1] is not None else f'LOJA {loja}'
+            prevenda_pedido['orderDetails'] = f'LOJA {loja}'
+            prevenda_pedido['notes'] = f'{prevenda[1]}' if prevenda[1] is not None else f'LOJA {loja}'
             prevenda_pedido['paymentMethod'] = get_payment_method(loja, prevenda_pedido['id'])['method']
             prevenda_pedido['orderTotal'] = float(prevenda[2])
             prevenda_pedido['date'] = orderDate + timezone
             prevenda_pedido['customer'] = get_client_info(loja, prevenda_pedido['id'])
             prevenda_pedido['deliveryPoint'] = get_address_info(loja, prevenda_pedido['id'])
+
+            print(prevenda)
             
             lista_prevendas.append(prevenda_pedido)
     except Exception as exp:
@@ -41,6 +43,7 @@ def envia_dados_foodydelivery(order_to_send, loja, prevenda):
     if response.status_code == 200:
         print('Solicitação bem-sucedida!')
         update_enviar_field_to_S(loja, prevenda_id)
+        print(response.content)
     else:
         print(f'Falha na solicitação com código de status {response.status_code}')
 
@@ -70,7 +73,7 @@ def inicia_robo(lojas = '*'):
         end_time = time.time()
         elapsed_time = end_time - start_time
         # system('cls')
-        print(f"\n\nTempo decorrido: {elapsed_time} segundos")
+        print(f"\n\nTempo decorrido: {elapsed_time:.2f} segundos")
         time.sleep(filter_timer)
 
 
