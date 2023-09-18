@@ -24,8 +24,6 @@ def filtra_dados_prevenda(loja):
             prevenda_pedido['date'] = orderDate + timezone
             prevenda_pedido['customer'] = get_client_info(loja, prevenda_pedido['id'])
             prevenda_pedido['deliveryPoint'] = get_address_info(loja, prevenda_pedido['id'])
-
-            print(prevenda)
             
             lista_prevendas.append(prevenda_pedido)
     except Exception as exp:
@@ -67,8 +65,7 @@ def inicia_robo(lojas = '*'):
                 envia_dados_foodydelivery(json.dumps(prevenda), loja, prevenda)
                 lista_prevendas.remove(prevenda)
                 time.sleep(6)
-            
-            limpa_lista(lista_prevendas)
+
     
         end_time = time.time()
         elapsed_time = end_time - start_time

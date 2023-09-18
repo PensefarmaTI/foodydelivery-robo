@@ -141,6 +141,14 @@ def get_lojas_list():
     return lojas_list
 
 def visualizacao_objeto(prevenda, loja):
+    if isinstance(prevenda, list):
+        for prevenda_ in prevenda.copy():
+            visualiza_prevenda(prevenda_, loja)
+            prevenda.remove(prevenda_)
+    else:
+        visualiza_prevenda(prevenda, loja)
+
+def visualiza_prevenda(prevenda, loja):
     print(f'\n\nLOJA: {loja}\n')
     print(f"id: {prevenda['id']}")
     print(f"prevenda_itens: \n{prevenda['orderDetails']}")
@@ -169,11 +177,6 @@ def update_enviar_field_to_S(loja, prevenda):
 def reset_enviado_field(loja):
     query = f"update PDV_PREVENDAS set ENVIADO_FOODY = NULL where loja = {loja} and data = '{data}' and ORIGEM = 'T' and versao <> 'IFOOD'"
     update(query)
-
-def limpa_lista(lista):
-    for item in lista:
-        lista.remove(item)
-    return lista
 
 if __name__ == '__main__':
     print(get_address_info(36, prevenda_numero=500112447))
