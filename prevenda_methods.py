@@ -1,5 +1,7 @@
 from config_db import conexao
 from datetime import datetime
+from geopy.geocoders import Nominatim
+from utils import *
 
 data = datetime.now().strftime("%d/%m/%Y")
 
@@ -63,7 +65,7 @@ def get_payment_method(loja, prevenda_numero):
                 payment_method['value'] = str(payment[payment_index])
                 payment_method['exchange'] = str(payment[1])
             elif payment_index == 2:
-                payment_method['method'] = 'online'
+                payment_method['method'] = 'on_credit'
                 payment_method['value'] = str(payment[payment_index])
             elif payment_index == 3:
                 payment_method['method'] = 'card'
@@ -74,13 +76,23 @@ def get_payment_method(loja, prevenda_numero):
 
 
 
-def get_client_info(loja, prevenda_numero):
-    client_info = get_prevenda(loja, columns='nome, telefone',where_filter=f'and prevenda = {prevenda_numero}')[0]
-    telefone = client_info[0]
-    nome = client_info[1]
+def get_client_info(loja, prevenda_numero=''):
+
+    client_info = get_prevenda(loja, columns='nome, telefone',where_filter=f' and prevenda = {prevenda_numero}')[0]
+    
+    telefone = client_info[1]
+
+    query = "SELECT CASE WHEN A.CODIGO_CONVENIO IS NULL THEN A.NOME ELSE B.NOME END AS NOME "
+    query += "FROM PDV_PREVENDAS A WITH(NOLOCK) LEFT JOIN ENTIDADES_CONVENIOS_CARTOES B WITH(NOLOCK) "
+    query += "ON A.CODIGO_CONVENIO = B.ENTIDADE AND A.CLIENTE = B.CONVENIO_CARTAO "
+    query += f"where prevenda = {prevenda_numero} and loja = {loja}"
+
+    nome = get_list_of_db(query)[0][0]
+   
+
     client_info = {
-        'customerPhone': nome,
-        'customerName': telefone,
+        'customerPhone': telefone,
+        'customerName': nome,
         'customerEmail': ''
     }
     return client_info
@@ -98,11 +110,19 @@ def get_address_info(loja, prevenda_numero):
     cidade = address_info_prevenda[6]
     estado = address_info_prevenda[7]
     pais = "brasil"
-    coordinates = {"lat":"","lng":""}
+
+    
+    
 
     endereco = endereco.replace(',','')
 
-    address =  f'{tipo_endereco} {endereco} - {bairro} - {cep} , {numero}, {bairro}'
+    address =  f'{tipo_endereco} {endereco} {cep}, {numero}, {bairro}'
+
+    # geolocator = Nominatim(user_agent="wazeyes")
+    # location = geolocator.geocode(address)
+
+    # print(location.address)
+    # coordinates = {"lat":location.Location.latitude ,"lng":location.log}
 
     rua = f'{tipo_endereco} {endereco}, {bairro} CEP.:{cep}'
 
@@ -110,7 +130,7 @@ def get_address_info(loja, prevenda_numero):
         "address": address,
         "street": rua,
         "houseNumber": numero,
-        "coordinates": coordinates,
+        # "coordinates": coordinates,
         "city": cidade,
         "region": bairro,
         "country": pais,
@@ -148,6 +168,7 @@ def visualizacao_objeto(prevenda, loja):
     else:
         visualiza_prevenda(prevenda, loja)
 
+@log
 def visualiza_prevenda(prevenda, loja):
     print(f'\n\nLOJA: {loja}\n')
     print(f"id: {prevenda['id']}")
@@ -174,9 +195,15 @@ def update_enviar_field_to_S(loja, prevenda):
     query = f"update PDV_PREVENDAS set ENVIADO_FOODY = 'S' where loja = {loja} and data = '{data}' and ORIGEM = 'T' and versao <> 'IFOOD' and PREVENDA={prevenda}"
     update(query)
 
+
 def reset_enviado_field(loja):
     query = f"update PDV_PREVENDAS set ENVIADO_FOODY = NULL where loja = {loja} and data = '{data}' and ORIGEM = 'T' and versao <> 'IFOOD'"
     update(query)
 
+
+
 if __name__ == '__main__':
-    print(get_address_info(36, prevenda_numero=500112447))
+    get_client_info(36)
+
+
+
