@@ -1,1 +1,4 @@
 config_db.py
+dist/
+build/
+main.spec

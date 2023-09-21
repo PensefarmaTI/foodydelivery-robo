@@ -4,6 +4,8 @@ from geopy.geocoders import Nominatim
 from utils import *
 
 data = datetime.now().strftime("%d/%m/%Y")
+file_name = 'lista_lojas.txt'
+
 
 def get_prevenda(loja, columns='*', where_filter=''):
     query = f"select {columns} from pdv_prevendas where loja = {loja} and data = '{data}' and ORIGEM = 'T' and canal_venda <> 8 {where_filter} and ENVIADO_FOODY = 'N'"
@@ -178,6 +180,25 @@ def visualiza_prevenda(prevenda, loja):
     print(f"total: {prevenda['orderTotal']}")
     print(f"endereço: {prevenda['deliveryPoint']}")
     print(f"data: {prevenda['date']}\n")
+
+def get_lojas_from_file():
+    lojas = ''
+    with open(file_name, 'r') as file:
+        while True:
+            line = file.readline()
+            if line.startswith('#'):
+                continue
+            if line != '':
+                lojas += f'{line}'
+            else:
+                break
+
+    if lojas == '':
+        lojas = '*'
+
+    lojas = ', '.join(lojas.split('\n'))
+    return lojas
+    
 
 
 def update(query):

@@ -1,0 +1,3 @@
+# para configurar o robo para rodar em todas as lojas, só remover os itens do arquivo
+36
+43
