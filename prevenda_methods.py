@@ -4,7 +4,7 @@ from geopy.geocoders import Nominatim
 from utils import *
 
 data = datetime.now().strftime("%d/%m/%Y")
-file_name = 'lista_lojas.txt'
+file_name = './lista_lojas.txt'
 
 
 def get_prevenda(loja, columns='*', where_filter=''):
@@ -170,7 +170,7 @@ def visualizacao_objeto(prevenda, loja):
     else:
         visualiza_prevenda(prevenda, loja)
 
-@log
+# @log
 def visualiza_prevenda(prevenda, loja):
     print(f'\n\nLOJA: {loja}\n')
     print(f"id: {prevenda['id']}")
@@ -183,7 +183,7 @@ def visualiza_prevenda(prevenda, loja):
 
 def get_lojas_from_file():
     lojas = ''
-    with open(file_name, 'r') as file:
+    with open(file_name, 'r+') as file:
         while True:
             line = file.readline()
             if line.startswith('#'):
