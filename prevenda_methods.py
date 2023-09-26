@@ -1,8 +1,8 @@
 from config_db import conexao
 from datetime import datetime
 from utils import *
+from os import environ
 
-file_name = './lista_lojas.txt'
 data = datetime.now().strftime("%d/%m/%Y")
 
 class Prevenda():
@@ -185,9 +185,14 @@ def visualiza_prevenda(prevenda, loja):
 
 def get_lojas_from_file():
     lojas = ''
-    with open(file_name, 'r+') as file:
+    
+    file_path = environ['PATH']
+    file_name = '\lista_lojas.txt'
+    file = file_path + file_name
+
+    with open(file, 'r+') as f:
         while True:
-            line = file.readline()
+            line = f.readline()
             if line.startswith('#'):
                 continue
             if line != '':

@@ -19,6 +19,7 @@ while not sair:
 
 
 # loja = get_lojas_from_file()
+# print(loja)
 # inicia_robo(loja)
 
 conexao.close()
