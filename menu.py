@@ -22,8 +22,8 @@ def menu_opcoes():
     print()
     print('\t1 - Iniciar robo')
     print('\t2 - Visualização de prevendas não enviadas')
-    print('\t3 - Filtrar')
-    print('\t4 - Resetar Enviado Null')
+    # print('\t3 - Filtrar')
+    print('\t3 - Resetar Enviado Null')
     print('\t0 - Sair')
     print()
 

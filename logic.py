@@ -5,14 +5,14 @@ import requests
 import time
 import json
 
+
 inicializado = False
 lista_prevendas = []
 timezone = '-03:00'
 filter_timer = 2
 
 def filtra_dados_prevenda(loja):
-    global data
-    data = datetime.now().strftime("%d/%m/%Y")
+    verify_data()
     prevenda_list = get_prevenda(loja, columns='prevenda, observacoes, total_liquido')
     orderDate = datetime.now().strftime("%Y-%m-%dT%H:%M:%S%z")
     try:
@@ -49,6 +49,7 @@ def envia_dados_foodydelivery(order_to_send, loja, prevenda):
 
 
 def inicia_robo(lojas = '*'):
+    verify_data()
     inicializado = True
     while inicializado:
         start_time = time.time()
