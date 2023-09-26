@@ -1,6 +1,5 @@
 from config_db import conexao
 from datetime import datetime
-from geopy.geocoders import Nominatim
 from utils import *
 
 data = datetime.now().strftime("%d/%m/%Y")
