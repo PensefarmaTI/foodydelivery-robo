@@ -1,10 +1,13 @@
 from config_db import conexao
 from datetime import datetime
-from geopy.geocoders import Nominatim
 from utils import *
+from os import environ
 
 data = datetime.now().strftime("%d/%m/%Y")
-file_name = './lista_lojas.txt'
+
+class Prevenda():
+    def __init__(self):
+        pass
 
 
 def get_prevenda(loja, columns='*', where_filter=''):
@@ -14,7 +17,6 @@ def get_prevenda(loja, columns='*', where_filter=''):
     for item in prevenda_list:
         item = list(item)
     return prevenda_list
-
 
 
 def get_list_of_db(query):
@@ -183,9 +185,14 @@ def visualiza_prevenda(prevenda, loja):
 
 def get_lojas_from_file():
     lojas = ''
-    with open(file_name, 'r+') as file:
+    
+    file_path = environ['PATH']
+    file_name = '\lista_lojas.txt'
+    file = file_path + file_name
+
+    with open(file, 'r+') as f:
         while True:
-            line = file.readline()
+            line = f.readline()
             if line.startswith('#'):
                 continue
             if line != '':
@@ -222,6 +229,13 @@ def reset_enviado_field(loja):
     update(query)
 
 
+
+def verify_data():
+    global data
+    if data != datetime.now().strftime("%d/%m/%Y"):
+        data = datetime.now().strftime("%d/%m/%Y")
+    print(data)
+    
 
 if __name__ == '__main__':
     get_client_info(36)
