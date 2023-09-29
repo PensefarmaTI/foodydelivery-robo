@@ -172,16 +172,19 @@ def visualizacao_objeto(prevenda, loja):
     else:
         visualiza_prevenda(prevenda, loja)
 
-# @log
+@log
 def visualiza_prevenda(prevenda, loja):
-    print(f'\n\nLOJA: {loja}\n')
-    print(f"id: {prevenda['id']}")
-    print(f"prevenda_itens: \n{prevenda['orderDetails']}")
-    print(f"prevenda_obs: {prevenda['notes']}")
-    print(f"prevenda_pagamento: {prevenda['paymentMethod']}")
-    print(f"total: {prevenda['orderTotal']}")
-    print(f"endereço: {prevenda['deliveryPoint']}")
-    print(f"data: {prevenda['date']}\n")
+    string_prevenda  = f'\n\nLOJA: {loja}\n'
+    string_prevenda += f"id: {prevenda['id']}\n"
+    string_prevenda += f"prevenda_itens: \n{prevenda['orderDetails']}\n"
+    string_prevenda += f"prevenda_obs: {prevenda['notes']}\n"
+    string_prevenda += f"prevenda_pagamento: {prevenda['paymentMethod']}\n"
+    string_prevenda += f"total: {prevenda['orderTotal']}\n"
+    string_prevenda += f"endereço: {prevenda['deliveryPoint']}\n"
+    string_prevenda += f"data: {prevenda['date']}\n"
+
+    print(string_prevenda)
+    return string_prevenda
 
 def get_lojas_from_file():
     lojas = ''
@@ -234,7 +237,6 @@ def verify_data():
     global data
     if data != datetime.now().strftime("%d/%m/%Y"):
         data = datetime.now().strftime("%d/%m/%Y")
-    print(data)
     
 
 if __name__ == '__main__':
